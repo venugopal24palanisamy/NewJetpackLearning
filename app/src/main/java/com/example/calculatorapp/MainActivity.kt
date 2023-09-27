@@ -1,7 +1,7 @@
 package com.example.calculatorapp
 
 import android.os.Bundle
-import android.util.Log
+
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
@@ -48,6 +48,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.calculatorapp.components.InstagramSignUp
 import com.example.calculatorapp.ui.theme.CalculatorAppTheme
 import com.example.calculatorapp.ui.theme.Green
 import com.example.calculatorapp.ui.theme.Grey
@@ -58,10 +59,9 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             CalculatorAppTheme {
-                CalculatorView()
+                //CalculatorView()
+                InstagramSignUp()
             }
-
-
         }
     }
 
@@ -72,13 +72,36 @@ class MainActivity : ComponentActivity() {
         var b by remember { mutableStateOf("") }
         var c by remember { mutableStateOf("") }
 
-        fun subtraction(a: Float, b: Float): Float = a - b
-        fun multiplication(a: Float, b: Float): Float = a * b
-        fun division(a: Float, b: Float): Float = a / b
 
-        fun bmiCalculation(weight: Float, height: Float): Float {
-            Log.d("bmiCalculation", "$weight $height")
-            return weight / height * height
+        var weightError by remember { mutableStateOf("") }
+        var heightError by remember { mutableStateOf("") }
+
+        var isHeightError by remember { mutableStateOf(false) }
+        var isWeightError by remember { mutableStateOf(false) }
+
+        //fun subtraction(a: Float, b: Float): Float = a - b
+       // fun multiplication(a: Float, b: Float): Float = a * b
+       // fun division(a: Float, b: Float): Float = a / b
+
+        fun validate(): Boolean {
+
+            if (a.trim().isEmpty()) {
+                weightError = "Enter Weight in Kg"
+                isWeightError = true
+                return false
+            } else {
+                isWeightError = false
+            }
+
+            if (b.trim().isEmpty()) {
+                heightError = "Enter Height in m"
+                isHeightError = true
+                return true
+            } else {
+                isHeightError = false
+            }
+
+            return true
         }
         Surface(
             modifier = Modifier.fillMaxSize(),
@@ -98,20 +121,18 @@ class MainActivity : ComponentActivity() {
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
                     placeholder = { Text(text = "Enter your Weight in Kg") }
                 )
+
                 Spacer(modifier = Modifier.height(15.dp))
+
                 TextField(
                     value = b,
                     onValueChange = { b = it },
                     modifier = Modifier.fillMaxWidth(),
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
                     placeholder = { Text(text = "Enter your Height in m") }
-
-
                 )
 
                 Spacer(modifier = Modifier.height(15.dp))
-
-
 
                 Button(
                     onClick = {
@@ -136,7 +157,7 @@ class MainActivity : ComponentActivity() {
                 )
                 /*Row {
                     Button(
-                        onClick = { c = Multiplcation(a.toFloat(), b.toFloat()).toString() },
+                        onClick = { c = Multiplication(a.toFloat(), b.toFloat()).toString() },
                         modifier = Modifier
                             .padding(top = 15.dp),
                         colors = ButtonDefaults.buttonColors(containerColor = Color.Blue)
@@ -422,11 +443,8 @@ class MainActivity : ComponentActivity() {
                         }
                     }
                 }
-
             }
-
         }
-
     }
 
     @Preview(showBackground = true)
